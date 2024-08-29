@@ -1,0 +1,59 @@
+﻿@model IEnumerable<DistributerManagementSystemModels.Retailer>
+
+@{
+    ViewData["Title"] = "Retailers";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReailerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GSTIN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OnCredit)
+            </th>
+
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReailerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GSTIN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OnCredit)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+}
+
+

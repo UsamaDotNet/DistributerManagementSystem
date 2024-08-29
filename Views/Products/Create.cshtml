@@ -1,0 +1,163 @@
+﻿@model DistributerManagementSystemModels.Products
+
+@{
+    ViewData["Title"] = "Create";
+    var unitValues = ViewBag.UnitValues as Dictionary<string, List<SelectListItem>>;
+}
+
+
+<h1>Create</h1>
+
+<h4>Products</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ProductName" class="control-label"></label>
+                <input asp-for="ProductName" class="form-control" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductDescription" class="control-label"></label>
+                <input asp-for="ProductDescription" class="form-control" />
+                <span asp-validation-for="ProductDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductCategory" class="control-label"></label>
+                <select id="Unit" asp-for="ProductCategory" class="form-control" asp-items="ViewBag.Unit"></select>
+                <span asp-validation-for="ProductCategory" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" id="UnitValueDiv">
+                <label asp-for="Unit" class="control-label"></label>
+                <select id="UnitValue" asp-for="Unit" class="form-control">
+                    <option value="">Select Unit Value</option>
+                </select>
+                <span asp-validation-for="Unit" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" id="SizeDiv" style="display:none;">
+                <label asp-for="Size" class="control-label"></label>
+                <select id="Size" asp-for="Size" class="form-control" asp-items="ViewBag.Size"></select>
+                <span asp-validation-for="Size" class="text-danger"></span>
+            </div>
+
+
+
+@*             <div class="form-group row">
+                <!-- Label for Size -->
+                
+
+                <!-- Textbox for Numerical Input -->
+                <div class="col-sm-4">
+                    <label>Unit</label>
+                    <input type="number" class="form-control" placeholder="Unit" />
+                </div>
+
+                <!-- Dropdown for Unit Value -->
+                <div class="col-sm-4">
+                    <label asp-for="Size" class="col-sm-2 col-form-label control-label"></label>
+                    <select id="UnitValue" asp-for="Size" class="form-control">
+                        <option value="">Select Unit Value</option>
+                    </select>
+                </div>
+
+                <!-- Validation Message -->
+                <div class="col-sm-2">
+                    <span asp-validation-for="Size" class="text-danger"></span>
+                </div>
+            </div>
+ *@
+
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GSTOnProcut" class="control-label"></label>
+                <input asp-for="GSTOnProcut" class="form-control" />
+                <span asp-validation-for="GSTOnProcut" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="BuyingPrice" class="control-label"></label>
+                <input asp-for="BuyingPrice" class="form-control" />
+                <span asp-validation-for="BuyingPrice" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            var unitValues = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(unitValues));
+
+            $('#Unit').change(function () {
+                var selectedUnit = $(this).val();
+                var unitValueDropdown = $('#UnitValue');
+
+                // Clear current options
+                unitValueDropdown.empty();
+
+                if (selectedUnit && unitValues[selectedUnit]) {
+                    // Populate the second dropdown with the first item as selected
+                    var selectedItem = unitValues[selectedUnit][0];
+                    unitValueDropdown.append($('<option>', {
+                        value: selectedItem.Value,
+                        text: selectedItem.Text,
+                        selected: true
+                    }));
+
+                    // Optionally, disable the dropdown to prevent user selection
+                    // unitValueDropdown.prop('disabled', true);
+                } else {
+                    // If no match, reset to a default state
+                    unitValueDropdown.append($('<option>', {
+                        value: '',
+                        text: 'Select Unit Value'
+                    }));
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            // Initially hide the Size dropdown
+            $('#SizeDiv').hide();
+
+            // Show/Hide the Size dropdown based on the selected value in the ProductCategory dropdown
+            $('#Unit').change(function () {
+                var selectedValue = $(this).val();
+
+                if (selectedValue === 'Size') {
+                    $('#SizeDiv').show();  // Show the Size dropdown
+                     $('#UnitValueDiv').hide(); //hide the unit value
+                } else {
+                    $('#SizeDiv').hide();  // Hide the Size dropdown
+                    $('#UnitValueDiv').show(); //show the unit value
+                }
+            });
+        });
+    </script>
+}
